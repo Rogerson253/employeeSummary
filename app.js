@@ -69,9 +69,6 @@ inquirer
     const newManager = new Manager(answers.name, answers.id, answers.email, answers.number);
    
     arr.push(newManager);
-    console.log(arr);
-
-    render(arr);
     
     fs.writeFile(outputPath, render(arr), function(err) {
         if (err) {
