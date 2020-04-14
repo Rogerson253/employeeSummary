@@ -34,6 +34,9 @@ const render = require("./lib/htmlRenderer");
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work!```
 
+let arr = [];
+
+
 inquirer
   .prompt([
     {
@@ -63,11 +66,19 @@ inquirer
       },
   ])
   .then(function(answers) {
-    console.log(answers.name);
-    console.log(answers.id);
-    console.log(answers.email);
-    console.log(answers.role);
-    console.log(answers.number);
+    const newManager = new Manager(answers.name, answers.id, answers.email, answers.number);
+   
+    arr.push(newManager);
+    console.log(arr);
+
+    render(arr);
+    
+    fs.writeFile(outputPath, render(arr), function(err) {
+        if (err) {
+           return console.log(err);
+        }
+        console.log("Success!")
+    })
   })
   .catch(error => {
     if(error) {
@@ -76,3 +87,4 @@ inquirer
      console.log("Success!")
     }
   });
+
