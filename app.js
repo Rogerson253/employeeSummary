@@ -34,8 +34,10 @@ const render = require("./lib/htmlRenderer");
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work!```
 
+// Array holding role information
 let arr = [];
 
+// Function that generates questions in terminal
 function questions() {
 inquirer
   .prompt([
@@ -66,7 +68,8 @@ inquirer
       },
   ])
   .then(function(answers) {
-   
+    
+    // Asks manager specific question
       if (answers.role[0] === "Manager") {
         inquirer
           .prompt({
@@ -101,6 +104,7 @@ inquirer
               })
         })
       }
+      // Asks engineer specific question
       else if (answers.role[0] === 'Engineer') {
         inquirer
           .prompt({
@@ -135,6 +139,7 @@ inquirer
                 })
         })
       }
+      // Asks intern specific question
       else if (answers.role[0] === 'Intern') {
         inquirer
         .prompt({
