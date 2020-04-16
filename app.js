@@ -45,7 +45,7 @@ inquirer
         name: "name"
       },
       {
-        type: "input",
+        type: "number",
         message: "What is your id?",
         name: "id"
       },
@@ -55,27 +55,81 @@ inquirer
         name: "email"
       },
       {
-        type: "input",
+        type: "checkbox",
         message: "What is your role?",
-        name: "role"
-      },
-      {
-        type: "input",
-        message: "What is your office number?",
-        name: "number"
+        name: "role",
+        choices: [
+          "Manager",
+          "Engineer",
+          "Intern"
+        ]
       },
   ])
   .then(function(answers) {
-    const newManager = new Manager(answers.name, answers.id, answers.email, answers.number);
-   
-    arr.push(newManager);
     
-    fs.writeFile(outputPath, render(arr), function(err) {
-        if (err) {
-           return console.log(err);
+    console.log(answers.role[0])
+   
+        if (answers.role[0] === "Manager") {
+          inquirer
+            .prompt({
+              type: "number",
+              message: "What is your office number?",
+              name: "number",
+            })
+            .then(function(manAnswer) {
+              const newManager = new Manager(answers.name, answers.id, answers.email, manAnswer.number);
+
+              arr.push(newManager);
+        
+              fs.writeFile(outputPath, render(arr), function(err) {
+                  if (err) {
+                    return console.log(err);
+                  }
+                  console.log("Success!")
+              })
+          })
         }
-        console.log("Success!")
-    })
+
+      else if (answers.role[0] === 'Engineer') {
+        inquirer
+        .prompt({
+          type: "input",
+          message: "What is your github name?",
+          name: "github",
+        })
+        .then(function(engAnswer) {
+          const newEngineer = new Engineer(answers.name, answers.id, answers.email, engAnswer.github);
+
+          arr.push(newEngineer);
+        
+              fs.writeFile(outputPath, render(arr), function(err) {
+                  if (err) {
+                    return console.log(err);
+                  }
+                  console.log("Success!")
+              })
+        })
+      }
+      else if (answers.role[0] === 'Intern') {
+        inquirer
+        .prompt({
+          type: "input",
+          message: "What school did you attend?",
+          name: "school",
+        })
+        .then(function(intAnswer) {
+          const newIntern = new Intern(answers.name, answers.id, answers.email, intAnswer.school);
+
+          arr.push(newIntern);
+        
+              fs.writeFile(outputPath, render(arr), function(err) {
+                  if (err) {
+                    return console.log(err);
+                  }
+                  console.log("Success!")
+              })
+        })
+      }
   })
   .catch(error => {
     if(error) {
@@ -85,3 +139,16 @@ inquirer
     }
   });
 
+
+
+// Writing to html file for manager
+  // const newManager = new Manager(answers.name, answers.id, answers.email, answers.number);
+   
+    // arr.push(newManager);
+    
+    // fs.writeFile(outputPath, render(arr), function(err) {
+    //     if (err) {
+    //        return console.log(err);
+    //     }
+    //     console.log("Success!")
+    // })
