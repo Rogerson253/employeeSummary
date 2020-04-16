@@ -66,8 +66,6 @@ inquirer
       },
   ])
   .then(function(answers) {
-    
-    console.log(answers.role[0])
    
       if (answers.role[0] === "Manager") {
         inquirer
@@ -85,50 +83,56 @@ inquirer
                 if (err) {
                   return console.log(err);
                 }
-                console.log("Success!")
             })
-            inquirer.prompt({
-              type: "confirm",
-              message: "Would you like to add another employee?",
-              name: "add",
-            }).then(function(addEmployee) {
-              if (addEmployee.add) {
-                return questions();
-              }else {
-                console.log("All employees added!")
-              }
-            })
+            
+            inquirer
+              .prompt({
+                type: "confirm",
+                message: "Would you like to add another employee?",
+                name: "add",
+              })
+              .then(function(addEmployee) {
+                if (addEmployee.add) {
+                  return questions();
+                }
+                else {
+                  console.log("All employees added!")
+                }
+              })
         })
       }
       else if (answers.role[0] === 'Engineer') {
         inquirer
-        .prompt({
-          type: "input",
-          message: "What is your github name?",
-          name: "github",
-        })
-        .then(function(engAnswer) {
-          const newEngineer = new Engineer(answers.name, answers.id, answers.email, engAnswer.github);
+          .prompt({
+            type: "input",
+            message: "What is your github name?",
+            name: "github",
+          })
+          .then(function(engAnswer) {
+            const newEngineer = new Engineer(answers.name, answers.id, answers.email, engAnswer.github);
 
-          arr.push(newEngineer);
-        
-              fs.writeFile(outputPath, render(arr), function(err) {
-                  if (err) {
-                    return console.log(err);
+            arr.push(newEngineer);
+          
+                fs.writeFile(outputPath, render(arr), function(err) {
+                    if (err) {
+                      return console.log(err);
+                    }
+                })
+             
+              inquirer
+                .prompt({
+                  type: "confirm",
+                  message: "Would you like to add another employee?",
+                  name: "add",
+                })
+                .then(function(addEmployee) {
+                  if (addEmployee.add) {
+                    return questions();
                   }
-                  console.log("Success!")
-              })
-              inquirer.prompt({
-                type: "confirm",
-                message: "Would you like to add another employee?",
-                name: "add",
-              }).then(function(addEmployee) {
-                if (addEmployee.add) {
-                  return questions();
-                }else {
-                  console.log("All employees added!")
-                }
-              })
+                  else {
+                    console.log("All employees added!")
+                  }
+                })
         })
       }
       else if (answers.role[0] === 'Intern') {
@@ -147,40 +151,30 @@ inquirer
                   if (err) {
                     return console.log(err);
                   }
-                  console.log("Success!")
               })
-              inquirer.prompt({
-                type: "confirm",
-                message: "Would you like to add another employee?",
-                name: "add",
-              }).then(function(addEmployee) {
-                if (addEmployee.add) {
-                  return questions();
-                }else {
-                  console.log("All employees added!")
-                }
-              })
+              
+              inquirer
+                .prompt({
+                  type: "confirm",
+                  message: "Would you like to add another employee?",
+                  name: "add",
+                })
+                .then(function(addEmployee) {
+                  if (addEmployee.add) {
+                    return questions();
+                  }
+                  else {
+                    console.log("All employees added!")
+                  }
+                })
         })
       }
   })
   .catch(error => {
     if(error) {
       console.log(error)
-    } else {
-     console.log("Success!")
-    }
+    } 
   });
 }
 
 questions();
-// Writing to html file for manager
-  // const newManager = new Manager(answers.name, answers.id, answers.email, answers.number);
-   
-    // arr.push(newManager);
-    
-    // fs.writeFile(outputPath, render(arr), function(err) {
-    //     if (err) {
-    //        return console.log(err);
-    //     }
-    //     console.log("Success!")
-    // })
