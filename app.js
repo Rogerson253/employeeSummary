@@ -36,7 +36,7 @@ const render = require("./lib/htmlRenderer");
 
 let arr = [];
 
-
+function questions() {
 inquirer
   .prompt([
     {
@@ -69,27 +69,37 @@ inquirer
     
     console.log(answers.role[0])
    
-        if (answers.role[0] === "Manager") {
-          inquirer
-            .prompt({
-              type: "number",
-              message: "What is your office number?",
-              name: "number",
-            })
-            .then(function(manAnswer) {
-              const newManager = new Manager(answers.name, answers.id, answers.email, manAnswer.number);
-
-              arr.push(newManager);
-        
-              fs.writeFile(outputPath, render(arr), function(err) {
-                  if (err) {
-                    return console.log(err);
-                  }
-                  console.log("Success!")
-              })
+      if (answers.role[0] === "Manager") {
+        inquirer
+          .prompt({
+            type: "number",
+            message: "What is your office number?",
+            name: "number",
           })
-        }
+          .then(function(manAnswer) {
+            const newManager = new Manager(answers.name, answers.id, answers.email, manAnswer.number);
 
+            arr.push(newManager);
+      
+            fs.writeFile(outputPath, render(arr), function(err) {
+                if (err) {
+                  return console.log(err);
+                }
+                console.log("Success!")
+            })
+            inquirer.prompt({
+              type: "confirm",
+              message: "Would you like to add another employee?",
+              name: "add",
+            }).then(function(addEmployee) {
+              if (addEmployee.add) {
+                return questions();
+              }else {
+                console.log("All employees added!")
+              }
+            })
+        })
+      }
       else if (answers.role[0] === 'Engineer') {
         inquirer
         .prompt({
@@ -107,6 +117,17 @@ inquirer
                     return console.log(err);
                   }
                   console.log("Success!")
+              })
+              inquirer.prompt({
+                type: "confirm",
+                message: "Would you like to add another employee?",
+                name: "add",
+              }).then(function(addEmployee) {
+                if (addEmployee.add) {
+                  return questions();
+                }else {
+                  console.log("All employees added!")
+                }
               })
         })
       }
@@ -128,6 +149,17 @@ inquirer
                   }
                   console.log("Success!")
               })
+              inquirer.prompt({
+                type: "confirm",
+                message: "Would you like to add another employee?",
+                name: "add",
+              }).then(function(addEmployee) {
+                if (addEmployee.add) {
+                  return questions();
+                }else {
+                  console.log("All employees added!")
+                }
+              })
         })
       }
   })
@@ -138,9 +170,9 @@ inquirer
      console.log("Success!")
     }
   });
+}
 
-
-
+questions();
 // Writing to html file for manager
   // const newManager = new Manager(answers.name, answers.id, answers.email, answers.number);
    
